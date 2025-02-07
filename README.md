@@ -5,8 +5,8 @@ Siga os passos:
         Raiz
         ├── Fiap.Api (https://github.com/Nbgarcia/Fiap.Api.git)
         ├── hackathon-28-pacientes (https://github.com/cdoiche/hackathon28-pacientes.git)
-        ├── hackathon-fiap
-        │   └── HackathonFiap (https://github.com/cleitonzummach/hackathon-fiap.git)
+        ├── hackathon-fiap (https://github.com/cleitonzummach/hackathon-fiap.git)
+        │   └── HackathonFiap
         └── Infra (este repositório)
     ```
 2. Rodar o script ```.\Infra\build-images.ps1```. Com ele, as imagens da api serão montadas e enviadas para o docker hub.
