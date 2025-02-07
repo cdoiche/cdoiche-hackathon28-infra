@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-databases-job
+  namespace: hackathon-28
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: copy-init-script
+        image: busybox
+        volumeMounts:
+        - name: init-script-config
+          mountPath: /config-init-script
+        - name: init-script-volume
+          mountPath: /init-scripts
+        command: ["cp", "/config-init-script/init-databases.sql", "/init-scripts/init-databases.sql"]
+      containers:
+      - name: init-db
+        image: postgres:13
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secrets
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secrets
+              key: POSTGRES_PASSWORD
+        command:
+        - sh
+        args:
+        - "-c"
+        - |
+          PGPASSWORD=$(POSTGRES_PASSWORD) psql -h postgres-service -U $(POSTGRES_USER) -d postgres -f /init-scripts/init-databases.sql
+        volumeMounts:
+        - name: init-script-volume
+          mountPath: /init-scripts
+      volumes:
+      - name: init-script-config
+        configMap:
+          name: postgres-init-script
+      - name: init-script-volume
+        emptyDir: {}
+      restartPolicy: OnFailure

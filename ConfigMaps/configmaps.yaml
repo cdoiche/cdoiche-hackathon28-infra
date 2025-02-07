@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-configs
+  namespace: hackathon-28
+data:
+  ASPNETCORE_ENVIRONMENT: Development
+  ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+  OTLP__ENDPOINT: "http://otel-collector-service:4317"
+  POSTGRES_HOST: postgres-service
+  POSTGRES_PORT: "5432"
+  RABBITMQ_HOST: rabbitmq-service
+  RABBITMQ_PORT: "5672"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-script
+  namespace: hackathon-28
+data:
+  init-databases.sql: |
+    CREATE DATABASE db_agendamento;
+    CREATE DATABASE db_paciente;
+    CREATE DATABASE db_medico;
+
